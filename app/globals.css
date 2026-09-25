@@ -326,7 +326,7 @@ img, svg { max-width: 100%; }
 .admin-count-mark { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--line); color: var(--clay); }
 .admin-count-mark b { font: 400 28px/1 var(--serif); }
 .admin-count-mark span { font: 7px/1 var(--mono); letter-spacing: .1em; }
-.admin-filter { display: grid; grid-template-columns: minmax(170px,1.3fr) repeat(2,minmax(120px,.8fr)) minmax(120px,.8fr) minmax(120px,.8fr) auto; align-items: end; gap: 8px; padding: 15px; border: 1px solid var(--line); background: var(--white); }
+.admin-filter { display: grid; grid-template-columns: minmax(150px,1.3fr) repeat(3,minmax(105px,.8fr)) repeat(2,minmax(110px,.8fr)) auto; align-items: end; gap: 8px; padding: 15px; border: 1px solid var(--line); background: var(--white); }
 .admin-filter label { display: flex; min-width: 0; flex-direction: column; gap: 5px; color: var(--muted); font: 7px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
 .admin-filter .filter-search { min-width: 150px; }
 .admin-filter input, .admin-filter select { width: 100%; min-height: 38px; padding: 8px; font: 10px/1.2 var(--sans); letter-spacing: normal; text-transform: none; }
@@ -378,6 +378,36 @@ img, svg { max-width: 100%; }
 .confirm-cancel { border: 1px solid var(--line-dark); color: var(--pine); background: transparent; }
 .confirm-remove { border: 1px solid #0B1F3A; color: var(--white); background: #0B1F3A; }
 .confirm-actions button:disabled { opacity: .6; cursor: wait; }
+
+/* Submission review states */
+.admin-nav a { white-space: nowrap; }
+.admin-stats small a { color: var(--clay); text-decoration: underline; text-underline-offset: 3px; }
+.submission-queue { display: grid; gap: 15px; }
+.submission-review-card { min-width: 0; padding: clamp(17px,3vw,28px); border: 1px solid var(--line); background: var(--white); }
+.submission-review-card > header { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 17px; border-bottom: 1px solid var(--line); }
+.submission-review-card > header h2 { margin: 8px 0 4px; font: 400 clamp(25px,4vw,38px)/1.08 var(--serif); }
+.submission-review-card > header p, .submission-review-card > header time { color: var(--muted); font: 9px/1.5 var(--mono); }
+.submission-review-card > header p { margin: 0; }
+.submission-review-card > header time { flex: 0 0 auto; padding-top: 4px; }
+.submission-cover { display: block; width: min(100%,560px); max-height: 340px; margin: 20px auto; object-fit: contain; background: #EEF1F5; }
+.submission-content { max-height: 440px; overflow: auto; padding: 21px clamp(15px,4vw,48px); border: 1px solid var(--line); color: var(--ink); font: 400 17px/1.85 var(--serif); white-space: pre-wrap; overflow-wrap: anywhere; }
+.submission-content-urdu { font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", "Geeza Pro", "Arial", serif; font-size: 20px; line-height: 2.1; text-align: right; }
+.submission-review-card > footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 17px; color: var(--muted); font: 8px/1.4 var(--mono); }
+.submission-review-card > footer > div { display: flex; gap: 8px; }
+.submission-review-card > footer button { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; gap: 7px; padding: 0 13px; cursor: pointer; font: 600 9px/1 var(--mono); }
+.submission-review-card > footer button:disabled { cursor: wait; opacity: .6; }
+.review-reject { border: 1px solid var(--line-dark); color: var(--pine); background: transparent; }
+.review-approve { border: 1px solid var(--pine); color: var(--white); background: var(--pine); }
+.review-approve:hover { background: var(--pine-dark); }
+.status-pill { display: inline-flex; align-items: center; padding: 5px 7px; background: #EEF1F5; color: #475569; font: 700 7px/1 var(--mono); text-transform: uppercase; }
+.status-pending { color: #92400E; background: #FEF3C7; }
+.status-published { color: #14532D; background: #DCFCE7; }
+.status-rejected { color: #991B1B; background: #FEE2E2; }
+.status-archived { color: #475569; background: #E2E8F0; }
+.status-summary { margin-bottom: 14px; }
+.status-summary-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; margin-top: 15px; }
+.status-summary-grid > div { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 12px; border: 1px solid var(--line); }
+.status-summary-grid b { color: var(--pine); font: 400 23px/1 var(--serif); }
 
 /* Login */
 .admin-login-page { display: grid; grid-template-columns: minmax(0,1fr) minmax(320px,470px); gap: 8%; align-items: center; min-height: 68vh; padding: 60px 10%; }
@@ -561,6 +591,10 @@ img, svg { max-width: 100%; }
 }
 
 @media (max-width: 900px) {
+  .status-summary-grid { grid-template-columns: 1fr 1fr; }
+  .submission-review-card > header, .submission-review-card > footer { align-items: flex-start; flex-direction: column; }
+  .submission-review-card > footer > div { width: 100%; }
+  .submission-review-card > footer button { flex: 1; }
   .admin-table-wrap { overflow: visible; border: 0; background: transparent; }
   .admin-table, .admin-table tbody, .admin-table tr, .admin-table td { display: block; width: 100%; }
   .admin-table thead { display: none; }

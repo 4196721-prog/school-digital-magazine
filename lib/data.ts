@@ -13,7 +13,7 @@ export async function getPosts(options: { search?: string; category?: string; la
     return limit ? rows.slice(0, limit) : rows;
   }
   const db = createAdminClient();
-  let query = db.from("posts").select("id,slug,title,author_name,class_name,section,category,language,content,cover_image,published_at,view_count");
+  let query = db.from("posts").select("id,slug,title,author_name,class_name,section,category,language,content,cover_image,published_at,view_count").eq("status", "published");
   if (search) { const term = search.replace(/[,%()]/g, " ").trim().slice(0, 100); query = query.or(`title.ilike.%${term}%,content.ilike.%${term}%,author_name.ilike.%${term}%`); }
   if (category) query = query.eq("category", category);
   if (language) query = query.eq("language", language);
@@ -28,7 +28,7 @@ export async function getPost(slug: string): Promise<Post | null> {
   let normalizedSlug = slug;
   try { normalizedSlug = decodeURIComponent(slug); } catch {}
   if (!isSupabaseConfigured()) return demoPosts.find((post) => post.slug === normalizedSlug) ?? null;
-  const { data, error } = await createAdminClient().from("posts").select("*").eq("slug", normalizedSlug).maybeSingle();
+  const { data, error } = await createAdminClient().from("posts").select("*").eq("slug", normalizedSlug).eq("status", "published").maybeSingle();
   if (error) throw new Error(error.message);
   return data as Post | null;
 }

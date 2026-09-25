@@ -13,7 +13,7 @@ const plain = (value: string) => value.replace(/[\u0000-\u0008\u000B\u000C\u000E
 export async function GET(request: NextRequest) {
   const search = request.nextUrl.searchParams;
   try {
-    const db = createAdminClient(); let query = db.from("posts").select("id,slug,title,author_name,class_name,section,category,language,content,cover_image,published_at,view_count");
+    const db = createAdminClient(); let query = db.from("posts").select("id,slug,title,author_name,class_name,section,category,language,content,cover_image,published_at,view_count").eq("status", "published");
     const rawQ = search.get("q"); const q = rawQ?.replace(/[,%()]/g, " ").trim().slice(0, 100); if (q) query = query.or(`title.ilike.%${q}%,content.ilike.%${q}%,author_name.ilike.%${q}%`);
     const category = search.get("category"); if (category && categories.includes(category as (typeof categories)[number])) query = query.eq("category", category);
     const language = search.get("language"); if (language === "English" || language === "Urdu") query = query.eq("language", language);
@@ -50,13 +50,13 @@ export async function POST(request: NextRequest) {
     const { data: student, error: studentError } = await db.from("students").upsert({ name: author, class_name: className, section }, { onConflict: "name,class_name,section" }).select("id").single();
     if (studentError) throw studentError;
     const title = plain(values.title); const slug = `${slugify(title)}-${crypto.randomUUID().slice(0, 8)}`;
-    const { data, error } = await db.from("posts").insert({ slug, title, author_name: author, class_name: className, section, student_id: student.id, category: values.category, language: values.language, content: plain(values.content), cover_image: coverImage }).select("slug").single();
+    const { data, error } = await db.from("posts").insert({ slug, title, author_name: author, class_name: className, section, student_id: student.id, category: values.category, language: values.language, content: plain(values.content), cover_image: coverImage, status: "pending" }).select("slug,status").single();
     if (error) throw error;
     attempts.push(now); recent.set(ip, attempts);
-    return NextResponse.json({ slug: data.slug }, { status: 201 });
+    return NextResponse.json({ slug: data.slug, status: data.status }, { status: 201 });
   } catch (error) {
     if (uploadPath) { try { await createAdminClient().storage.from("magazine-covers").remove([uploadPath]); } catch {} }
     console.error("post submission failed", error);
-    return NextResponse.json({ error: "We couldn't publish your work just now. Please try again in a moment." }, { status: 500 });
+    return NextResponse.json({ error: "We couldn't submit your work just now. Please try again in a moment." }, { status: 500 });
   }
 }

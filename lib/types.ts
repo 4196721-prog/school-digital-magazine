@@ -1,10 +1,11 @@
 export const categories = ["Articles", "Blogs", "Poetry", "Stories", "Artwork", "Photography", "School Activities", "Achievements"] as const;
 export type Category = (typeof categories)[number];
 export type Language = "English" | "Urdu";
+export type PostStatus = "pending" | "published" | "rejected" | "archived";
 export type Post = {
   id: string; slug: string; title: string; author_name: string; class_name: string; section: string;
   category: Category; language: Language; content: string; cover_image: string | null;
-  published_at: string; view_count: number;
+  published_at: string; submitted_at?: string; status?: PostStatus; view_count: number;
 };
 
 export const demoPosts: Post[] = [
