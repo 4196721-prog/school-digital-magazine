@@ -1,73 +1,200 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, ArrowUpRight, Sparkles, BookOpen, PenLine } from "lucide-react";
 import { getPosts } from "@/lib/data";
 import { PostCard } from "@/components/post-card";
-import { categories } from "@/lib/types";
+import { HeroSection } from "@/components/hero-section";
+import { CategoryPanel } from "@/components/category-panel";
+import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const posts = await getPosts({ sort: "latest", limit: 30 });
+  const posts = await getPosts({ sort: "latest", limit: 20 });
   const [lead, ...latest] = posts;
-  const categoryRows = categories.map((category) => ({
-    category,
-    count: posts.filter((post) => post.category === category).length,
-    latest: posts.find((post) => post.category === category),
-  }));
-  const shelves = categoryRows.filter((row) => row.latest).slice(0, 4);
 
-  return <main className="home-page">
-    <section className="home-hero">
-      <div className="issue-line"><span>THE SCHOOL JOURNAL</span><i/> <span>ISSUE 01 · 2026</span><span className="issue-line-right">MADE HERE, READ EVERYWHERE</span></div>
-      <div className="hero-composition">
-        <div className="hero-intro">
-          <span className="eyebrow"><Sparkles size={13}/> AN OPEN PAGE FOR EVERY VOICE</span>
-          <h1>A school in<br/><em>full expression.</em></h1>
-          <p>Ideas from the classroom, the courtyard and everywhere in between. Made by students, shared with the world.</p>
-          <Link href="/submit" className="hero-submit">Your voice belongs here <ArrowUpRight size={16}/></Link>
-          <div className="hero-footnote"><span>WORDS · IMAGES · IDEAS</span><span>EST. MMXXVI</span></div>
-        </div>
-        <div className="hero-feature-wrap">
-          <span className="feature-annotation">ON THE COVER <b>01</b></span>
-          {lead ? <Link href={`/articles/${lead.slug}`} className="hero-feature">
-            <div className={`hero-picture${lead.cover_image ? " has-image" : " no-image"}`} style={lead.cover_image ? { backgroundImage: `url("${lead.cover_image}")` } : undefined}>
-              <span className="hero-picture-label">FEATURED STORY</span><span className="hero-picture-mark">S<span>J</span></span>
+  return (
+    <main className="min-h-screen bg-[#FAF9F6] text-[#111827]">
+      {/* 1. Cinematic Hero Section */}
+      <HeroSection />
+
+      {/* 2. Overlapping 7-Category Panel */}
+      <CategoryPanel />
+
+      {/* 3. Featured Story Spotlight (if any lead post exists) */}
+      {lead && (
+        <section className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 mt-16 md:mt-24">
+          <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#E8EEF5]">
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-xs tracking-[0.2em] font-bold text-[#0F2952] uppercase flex items-center gap-2">
+                <Sparkles size={14} className="text-[#C59B4B]" />
+                FEATURED STORY · ISSUE 01
+              </span>
+              <span className="w-12 h-[1px] bg-[#C59B4B] rounded-full hidden sm:inline-block" />
             </div>
-            <div className="hero-feature-copy" dir={lead.language === "Urdu" ? "rtl" : "ltr"}>
-              <div className="eyebrow">{lead.category} <span>·</span> {lead.language}</div>
-              <h2>{lead.title}</h2><p>{lead.content.replace(/\n/g, " ").slice(0, 150)}{lead.content.length > 150 ? "…" : ""}</p>
-              <div className="byline"><span>BY <b>{lead.author_name}</b> · CLASS {lead.class_name} {lead.section}</span><span>READ THE STORY <ArrowRight size={14}/></span></div>
+            <Link
+              href="/articles"
+              className="text-xs md:text-sm font-semibold text-[#0F2952] hover:text-[#C59B4B] transition-colors flex items-center gap-1 group"
+            >
+              <span>Explore All</span>
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="bg-white rounded-3xl border border-[#E5E9F0] overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 gap-0">
+            {/* Visual Cover */}
+            <div className="relative lg:col-span-7 min-h-[320px] lg:min-h-[460px] bg-[#0F2952] overflow-hidden group">
+              {lead.cover_image ? (
+                <Image
+                  src={lead.cover_image}
+                  alt={lead.title}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-[#0F2952] via-[#1E3A6E] to-[#C59B4B]/70 flex items-center justify-center p-8 text-center text-white">
+                  <div className="font-serif italic text-4xl opacity-20">MSB BHS JOURNAL</div>
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0B1B3D]/70 via-transparent to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-white">
+                <span className="px-3 py-1 rounded-full text-xs font-mono font-bold tracking-wider uppercase bg-[#0B1B3D]/80 backdrop-blur-md border border-white/20">
+                  {lead.category}
+                </span>
+                <span className="font-mono text-xs opacity-90">{formatDate(lead.published_at)}</span>
+              </div>
             </div>
-          </Link> : <div className="hero-empty">
-            <div className="empty-monogram">S<span>J</span></div><span className="eyebrow">THE FIRST EDITION IS OPEN</span>
-            <h2>There’s room<br/>for your story.</h2><p>The journal is ready for its next voice. Publish a poem, a photograph, an idea or a story.</p>
-            <Link href="/submit" className="text-link">WRITE THE OPENING STORY <ArrowUpRight size={14}/></Link>
-          </div>}
+
+            {/* Story Details */}
+            <div
+              className="lg:col-span-5 p-7 sm:p-10 lg:p-12 flex flex-col justify-center"
+              dir={lead.language === "Urdu" ? "rtl" : "ltr"}
+            >
+              <div className="flex items-center gap-2 text-xs font-mono text-[#C59B4B] font-bold tracking-widest uppercase mb-3">
+                <span>{lead.category}</span>
+                <span>·</span>
+                <span>{lead.language}</span>
+              </div>
+
+              <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0F2952] hover:text-[#C59B4B] transition-colors leading-tight">
+                <Link href={`/articles/${lead.slug}`}>{lead.title}</Link>
+              </h2>
+
+              <p className="mt-4 text-sm sm:text-base text-[#475569] leading-relaxed line-clamp-4">
+                {lead.content.replace(/\n/g, " ").slice(0, 240)}…
+              </p>
+
+              {/* Byline */}
+              <div className="mt-8 pt-6 border-t border-[#F1F4F9] flex items-center justify-between">
+                <div>
+                  <span className="block text-xs font-mono text-[#8E9CAE] uppercase tracking-wider">
+                    WRITTEN BY
+                  </span>
+                  <span className="text-sm font-bold text-[#0F2952]">
+                    {lead.author_name} · Class {lead.class_name} {lead.section}
+                  </span>
+                </div>
+
+                <Link
+                  href={`/articles/${lead.slug}`}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#0F2952] text-white text-xs font-semibold hover:bg-[#C59B4B] transition-colors shadow-sm group"
+                >
+                  <span>Read Story</span>
+                  <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 4. Latest Stories Grid */}
+      <section className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 mt-16 md:mt-24">
+        <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#E8EEF5]">
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-xs tracking-[0.2em] font-bold text-[#0F2952] uppercase">
+              NEW ON THE PAGE
+            </span>
+            <span className="w-12 h-[1px] bg-[#C59B4B] rounded-full hidden sm:inline-block" />
+          </div>
+          <Link
+            href="/articles"
+            className="text-xs md:text-sm font-semibold text-[#0F2952] hover:text-[#C59B4B] transition-colors flex items-center gap-1 group"
+          >
+            <span>All Publications</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          </Link>
         </div>
-      </div>
-      <div className="hero-index"><span>01 — STUDENT VOICES, WITHOUT A GATE</span><span>{String(posts.length).padStart(2, "0")} RECENT STORIES</span><span>SCROLL TO EXPLORE ↓</span></div>
-    </section>
 
-    <section className="latest-section page-section">
-      <div className="section-heading"><div><span className="eyebrow">FRESH FROM THE JOURNAL</span><h2>New on <em>the page.</em></h2></div><Link href="/articles" className="text-link">THE FULL INDEX <ArrowRight size={15}/></Link></div>
-      {latest.length ? <div className="latest-grid">{latest.slice(0, 3).map((post, index) => <PostCard key={post.id} post={post} variant={index === 0 ? "feature-card" : ""}/>)}</div> : <div className="latest-empty"><span className="empty-rule"/><p>Every issue starts somewhere.<br/><Link href="/submit">Make the next story yours <ArrowUpRight size={14}/></Link></p></div>}
-    </section>
+        {latest.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+            {latest.slice(0, 6).map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        ) : (
+          <div className="bg-white rounded-3xl border border-[#E5E9F0] p-12 text-center max-w-xl mx-auto my-8">
+            <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#F4F6F9] text-[#0F2952] mb-4">
+              <BookOpen size={22} />
+            </span>
+            <h3 className="font-serif text-2xl font-bold text-[#0F2952]">
+              Every Issue Starts Somewhere
+            </h3>
+            <p className="mt-2 text-sm text-[#64748B] max-w-md mx-auto">
+              Be the first to publish a poem, article, story, or photograph in the MSB BHS Digital Magazine.
+            </p>
+            <Link
+              href="/submit"
+              className="mt-6 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#0F2952] text-white text-sm font-semibold hover:bg-[#C59B4B] transition-colors"
+            >
+              <span>Submit Your Voice</span>
+              <ArrowRight size={15} />
+            </Link>
+          </div>
+        )}
+      </section>
 
-    <section className="category-section page-section">
-      <div className="section-heading"><div><span className="eyebrow">EIGHT WAYS TO SEE IT</span><h2>Find your <em>corner.</em></h2></div><p>From sharp ideas to quiet moments, there’s a place for every kind of making.</p></div>
-      <div className="category-index">{categoryRows.map(({ category, count, latest: item }, index) => <Link key={category} href={`/category/${encodeURIComponent(category)}`} className={`category-index-row category-row-${index + 1}`}>
-        <span className="category-number">0{index + 1}</span><span className="category-name">{category}</span>
-        <span className="category-latest">{item?.title ?? ""}</span><span className="category-count">{String(count).padStart(2, "0")} {count === 1 ? "STORY" : "STORIES"}</span><ArrowUpRight className="category-arrow" size={17}/>
-      </Link>)}</div>
-    </section>
+      {/* 5. Editorial Vision & Submission Banner */}
+      <section className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 my-20 md:my-28">
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#0B1B3D] via-[#10254C] to-[#0A1735] text-white p-8 sm:p-12 lg:p-16 shadow-2xl">
+          {/* Subtle background glow effect */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#C59B4B]/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-80 h-80 bg-[#38BDF8]/10 rounded-full blur-3xl pointer-events-none" />
 
-    {shelves.length > 0 && <section className="voices-section page-section">
-      <div className="section-heading"><div><span className="eyebrow">A FEW WAYS IN</span><h2>Read around. <em>Stay curious.</em></h2></div></div>
-      <div className="voices-grid">{shelves.map(({ category, latest: post }, index) => post && <Link href={`/articles/${post.slug}`} key={category} className={`voice-tile voice-tile-${index + 1}`} dir={post.language === "Urdu" ? "rtl" : "ltr"}>
-        <span className="eyebrow">{category} <i/> {post.language}</span><h3>{post.title}</h3><p>{post.content.replace(/\n/g, " ").slice(0, 100)}{post.content.length > 100 ? "…" : ""}</p><span className="voice-author">{post.author_name} · CLASS {post.class_name}</span><ArrowUpRight className="voice-arrow" size={17}/>
-      </Link>)}</div>
-    </section>}
+          <div className="relative z-10 max-w-3xl">
+            <span className="font-mono text-xs tracking-[0.25em] text-[#C59B4B] uppercase font-bold">
+              OPEN SUBMISSIONS · MSB HAIDERY &amp; BADRI HIGH SCHOOL
+            </span>
+            <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
+              From Pen to Page, <br />
+              <span className="text-[#C59B4B] italic">From Ideas to Impact.</span>
+            </h2>
+            <p className="mt-4 text-base sm:text-lg text-[#CBD5E1] leading-relaxed">
+              Every poem, photograph, reflective article, and inventive thought has a home in this journal. Share your perspective and leave your mark on the school community.
+            </p>
 
-    <section className="contribute-band"><div><span className="eyebrow">THE NEXT PAGE IS YOURS</span><h2>Make something.<br/><em>Let it be seen.</em></h2></div><p>A poem, a photograph, a small discovery, a big question. Your work belongs in the journal.</p><Link href="/submit" className="contribute-link">Submit your work <ArrowUpRight size={17}/></Link><span className="contribute-seal">OPEN<br/>SUBMISSIONS<br/><b>ALWAYS</b></span></section>
-  </main>;
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <Link
+                href="/submit"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-[#C59B4B] text-[#0B1B3D] text-sm font-bold shadow-lg hover:bg-white hover:text-[#0B1B3D] transition-all duration-200"
+              >
+                <PenLine size={16} />
+                <span>Submit Your Work</span>
+                <ArrowRight size={15} />
+              </Link>
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-medium border border-white/20 transition-colors"
+              >
+                <span>About the Magazine</span>
+                <ArrowUpRight size={15} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 }

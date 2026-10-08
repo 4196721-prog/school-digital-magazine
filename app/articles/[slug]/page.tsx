@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Eye } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Eye, Calendar } from "lucide-react";
 import { getPost, getPosts } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 import { PostCard } from "@/components/post-card";
@@ -20,40 +21,172 @@ function createDescription(content: string) {
   return `${excerpt.slice(0, lastSpace > 0 ? lastSpace : excerpt.length).trimEnd()}…`;
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const post = await getPost(slug);
   const description = post ? createDescription(post.content) : undefined;
-  return post ? { title: post.title, description, openGraph: { title: post.title, description, images: post.cover_image ? [post.cover_image] : [] } } : { title: "Story not found" };
+  return post
+    ? {
+        title: post.title,
+        description,
+        openGraph: {
+          title: post.title,
+          description,
+          images: post.cover_image ? [post.cover_image] : [],
+        },
+      }
+    : { title: "Story not found" };
 }
 
-export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function ArticlePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();
-  const related = (await getPosts({ category: post.category, limit: 4 })).filter((item) => item.id !== post.id).slice(0, 3);
+
+  const related = (await getPosts({ category: post.category, limit: 4 }))
+    .filter((item) => item.id !== post.id)
+    .slice(0, 3);
   const rtl = post.language === "Urdu";
 
-  return <main className="article-page">
-    <ViewTracker postId={post.id}/>
-    <div className="article-topline"><Link href="/articles" className="back-link"><ArrowLeft size={15}/> ALL STORIES</Link><span>THE SCHOOL JOURNAL <i/> FEATURE</span></div>
-    <header className="article-header" dir={rtl ? "rtl" : "ltr"}>
-      <div className="article-category"><span>{post.category}</span><i/><span>{post.language}</span></div>
-      <h1>{post.title}</h1>
-      <div className="article-byline">
-        <span className="author-monogram">{post.author_name.slice(0, 1)}</span>
-        <span className="article-author"><b>{post.author_name}</b><small>CLASS {post.class_name} · SECTION {post.section}</small></span>
-        <span className="article-date"><small>ISSUE 01 · {formatDate(post.published_at)}</small><span><Eye size={14}/> {post.view_count.toLocaleString()} reads</span></span>
-      </div>
-    </header>
-    {post.cover_image && <div className="article-cover" role="img" aria-label={`Cover image for ${post.title}`} style={{ backgroundImage: `url("${post.cover_image}")` }}><span>THE SCHOOL JOURNAL · {post.category.toUpperCase()}</span></div>}
-    <div className="article-reading-layout">
-      <aside className="article-margin-note"><span>01</span><i/> A STUDENT VOICE<br/>IN THE JOURNAL</aside>
-      <article className={`article-content ${rtl ? "rtl-content" : ""}`} dir={rtl ? "rtl" : "ltr"}>
-        {post.content.split(/\n\n+/).map((paragraph, index) => <p key={index}>{paragraph}</p>)}
+  return (
+    <main className="min-h-screen bg-[#FAF9F6] py-10 md:py-16">
+      {/* View Tracking Component */}
+      <ViewTracker postId={post.id} />
+
+      <article className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Top Back Navigation Bar */}
+        <div className="flex items-center justify-between pb-6 mb-8 border-b border-[#E8EEF5]">
+          <Link
+            href="/articles"
+            className="inline-flex items-center gap-2 text-xs md:text-sm font-semibold text-[#0F2952] hover:text-[#C59B4B] transition-colors"
+          >
+            <ArrowLeft size={16} />
+            <span>Back to All Works</span>
+          </Link>
+
+          <div className="flex items-center gap-2 text-xs font-mono text-[#64748B]">
+            <span className="uppercase tracking-wider font-bold text-[#0F2952]">{post.category}</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C59B4B]" />
+            <span>{post.language}</span>
+          </div>
+        </div>
+
+        {/* Article Header */}
+        <header className={`mb-10 ${rtl ? "text-right" : "text-left"}`} dir={rtl ? "rtl" : "ltr"}>
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold text-[#0F2952] leading-[1.12] tracking-tight">
+            {post.title}
+          </h1>
+
+          {/* Byline and Stats */}
+          <div className="mt-8 pt-6 border-t border-[#E8EEF5] flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5">
+              <div className="w-11 h-11 rounded-full bg-[#0F2952] text-[#C59B4B] font-serif font-bold text-lg flex items-center justify-center shadow-sm">
+                {post.author_name.slice(0, 1).toUpperCase()}
+              </div>
+              <div>
+                <span className="block font-bold text-sm sm:text-base text-[#0F2952]">
+                  {post.author_name}
+                </span>
+                <span className="block text-xs font-mono text-[#64748B]">
+                  Class {post.class_name} · Section {post.section}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 text-xs font-mono text-[#64748B]">
+              <span className="flex items-center gap-1.5">
+                <Calendar size={13} className="text-[#C59B4B]" />
+                {formatDate(post.published_at)}
+              </span>
+              <span className="flex items-center gap-1.5 font-semibold text-[#0F2952]">
+                <Eye size={14} className="text-[#C59B4B]" />
+                {post.view_count.toLocaleString()} reads
+              </span>
+            </div>
+          </div>
+        </header>
+
+        {/* Cover Image (if present) */}
+        {post.cover_image && (
+          <div className="relative aspect-[16/9] w-full rounded-2xl md:rounded-3xl overflow-hidden mb-12 shadow-md bg-[#EEF2F7]">
+            <Image
+              src={post.cover_image}
+              alt={`Cover image for ${post.title}`}
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 1000px"
+              className="object-cover"
+            />
+          </div>
+        )}
+
+        {/* Content Body */}
+        <div
+          className={`prose prose-lg max-w-none text-[#1E293B] font-serif text-lg sm:text-xl leading-[1.9] sm:leading-[2.05] ${
+            rtl ? "text-right font-urdu text-xl sm:text-2xl leading-[2.3]" : ""
+          }`}
+          dir={rtl ? "rtl" : "ltr"}
+        >
+          {post.content.split(/\n\n+/).map((paragraph, index) => (
+            <p key={index} className="mb-6">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+
+        {/* Social Share and Contribution Footer */}
+        <div className="mt-14 pt-8 border-t border-[#E8EEF5] flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <ShareButton slug={post.slug} />
+          </div>
+
+          <Link
+            href="/submit"
+            className="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#0F2952] hover:text-[#C59B4B] transition-colors"
+          >
+            <span>Have a story to tell? Submit your voice</span>
+            <ArrowUpRight size={15} />
+          </Link>
+        </div>
+
+        {/* Related Works in this category */}
+        {related.length > 0 && (
+          <section className="mt-20 pt-12 border-t border-[#E8EEF5]">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <span className="font-mono text-xs tracking-[0.2em] font-bold text-[#C59B4B] uppercase">
+                  EXPLORE MORE
+                </span>
+                <h3 className="font-serif text-2xl font-bold text-[#0F2952] mt-1">
+                  More from {post.category}
+                </h3>
+              </div>
+
+              <Link
+                href={`/category/${encodeURIComponent(post.category)}`}
+                className="text-xs font-semibold text-[#0F2952] hover:text-[#C59B4B] transition-colors flex items-center gap-1"
+              >
+                <span>View Section</span>
+                <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {related.map((item) => (
+                <PostCard key={item.id} post={item} />
+              ))}
+            </div>
+          </section>
+        )}
       </article>
-    </div>
-    <div className="article-share"><span>PASS THE STORY ALONG</span><ShareButton slug={post.slug}/><Link href="/submit" className="article-submit-link">Add your voice <ArrowUpRight size={14}/></Link></div>
-    {related.length > 0 && <section className="related-section"><div className="section-heading"><div><span className="eyebrow">KEEP READING</span><h2>More from <em>{post.category.toLowerCase()}.</em></h2></div><Link href={`/category/${encodeURIComponent(post.category)}`} className="text-link">EXPLORE SECTION <ArrowUpRight size={14}/></Link></div><div className="story-grid">{related.map((item) => <PostCard key={item.id} post={item}/>)}</div></section>}
-  </main>;
+    </main>
+  );
 }

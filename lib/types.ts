@@ -16,3 +16,76 @@ export const demoPosts: Post[] = [
   { id: "demo-5", slug: "our-science-fair", title: "Ideas Take Flight at the Science Fair", author_name: "Editorial Desk", class_name: "School", section: "—", category: "School Activities", language: "English", content: "From a low-cost water filter to a model of a greener city, this year's science fair was full of thoughtful questions and inventive answers. Students across the middle and senior sections shared projects built around problems they see in everyday life.", cover_image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&w=1200&q=80", published_at: "2026-09-14T11:00:00.000Z", view_count: 88 },
   { id: "demo-6", slug: "blue-hour-sketch", title: "Blue Hour", author_name: "Areeba Noor", class_name: "7", section: "C", category: "Artwork", language: "English", content: "A sketch of the city just after sunset, when the last gold light meets the first evening blue.", cover_image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&w=1200&q=80", published_at: "2026-09-12T08:30:00.000Z", view_count: 75 },
 ];
+
+export const displayCategories = [
+  "Articles",
+  "Blogs",
+  "Poetry",
+  "Stories",
+  "Artwork",
+  "Audio",
+  "Video",
+] as const;
+
+export type DisplayCategory = (typeof displayCategories)[number];
+
+export const categoryMeta: Record<
+  DisplayCategory,
+  {
+    title: string;
+    description: string;
+    image: string;
+    icon: string;
+    slug: string;
+  }
+> = {
+  Articles: {
+    title: "Articles",
+    description: "Deep explorations, essays and student insights.",
+    image: "/images/categories/articles.jpg",
+    icon: "book",
+    slug: "Articles",
+  },
+  Blogs: {
+    title: "Blogs",
+    description: "Reflections, modern student voices and tech trends.",
+    image: "/images/categories/blogs.jpg",
+    icon: "file-text",
+    slug: "Blogs",
+  },
+  Poetry: {
+    title: "Poetry",
+    description: "Rhythm, verse, and quiet emotions in rhyme.",
+    image: "/images/categories/poetry.jpg",
+    icon: "feather",
+    slug: "Poetry",
+  },
+  Stories: {
+    title: "Stories",
+    description: "Narratives, fiction and campus chronicles.",
+    image: "/images/categories/stories.jpg",
+    icon: "library",
+    slug: "Stories",
+  },
+  Artwork: {
+    title: "Artwork",
+    description: "Visual creativity, drawings, paintings and designs.",
+    image: "/images/categories/artwork.jpg",
+    icon: "palette",
+    slug: "Artwork",
+  },
+  Audio: {
+    title: "Audio",
+    description: "Podcasts, recitation, dialogues and recordings.",
+    image: "/images/categories/audio.jpg",
+    icon: "mic",
+    slug: "Audio",
+  },
+  Video: {
+    title: "Video",
+    description: "Short films, documentaries, student reels and presentations.",
+    image: "/images/categories/video.jpg",
+    icon: "video",
+    slug: "Video",
+  },
+};
