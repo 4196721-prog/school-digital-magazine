@@ -15,10 +15,10 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-[#111827]">
-      {/* 1. Cinematic Hero Section */}
+      {/* 1. Cinematic Hero Section with Clean Background and HTML UI */}
       <HeroSection />
 
-      {/* 2. Overlapping 7-Category Panel */}
+      {/* 2. Explore by Category Panel */}
       <CategoryPanel />
 
       {/* 3. Featured Story Spotlight (if any lead post exists) */}

@@ -178,6 +178,7 @@ export function SubmitForm() {
           >
             <option value="English">English</option>
             <option value="Urdu">Urdu</option>
+            <option value="Lisan ud-Dawat">Lisan ud-Dawat</option>
           </select>
         </div>
       </div>

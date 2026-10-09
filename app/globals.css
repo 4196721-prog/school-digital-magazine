@@ -36,7 +36,8 @@
   background: linear-gradient(180deg, #E6C275 0%, #D4A74E 38%, #9E7428 78%, #BA8F3D 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.7));
+  -webkit-text-stroke: clamp(0.3px, 0.035vw, 0.45px) #081635;
+  filter: drop-shadow(0 1px 2px rgba(8, 22, 53, 0.35));
 }
 
 .font-urdu {

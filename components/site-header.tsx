@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BookOpen, Search, Menu, X } from "lucide-react";
 
 export function SiteHeader() {
@@ -10,6 +10,19 @@ export function SiteHeader() {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [scrollYScrolled, setScrollYScrolled] = useState(false);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const handleScroll = () => {
+      setScrollYScrolled(window.scrollY > 220);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [pathname]);
+
+  const scrolled = pathname !== "/" || scrollYScrolled;
 
   const navLinks = [
     { label: "Home", href: "/" },
@@ -27,8 +40,16 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="fixed top-2.5 sm:top-3.5 left-0 right-0 z-50 px-3 sm:px-6 w-full max-w-[960px] mx-auto pointer-events-none transition-all">
-      <div className="w-full pointer-events-auto bg-white rounded-full shadow-[0_8px_30px_rgba(11,27,61,0.12)] border border-[#E5EBF2] px-4 sm:px-7 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-4 md:gap-8 transition-all duration-300">
+    <header
+      className="fixed top-2.5 sm:top-3.5 left-0 right-0 z-50 px-3 sm:px-6 w-full max-w-[960px] mx-auto pointer-events-none transition-all duration-300 opacity-100 translate-y-0"
+    >
+      <div
+        className={`w-full pointer-events-auto rounded-full px-4 sm:px-7 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-4 md:gap-8 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/95 backdrop-blur-md shadow-[0_8px_30px_rgba(11,27,61,0.12)] border border-[#E5EBF2]"
+            : "bg-white/92 backdrop-blur-md shadow-[0_6px_25px_rgba(11,27,61,0.08)] border border-white/80"
+        }`}
+      >
         {/* Left: Magazine Book Emblem and School Monogram */}
         <Link
           href="/"

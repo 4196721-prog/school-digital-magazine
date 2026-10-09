@@ -54,7 +54,7 @@ export default async function ArticlePage({
   const related = (await getPosts({ category: post.category, limit: 4 }))
     .filter((item) => item.id !== post.id)
     .slice(0, 3);
-  const rtl = post.language === "Urdu";
+  const rtl = post.language === "Urdu" || post.language === "Lisan ud-Dawat";
 
   return (
     <main className="min-h-screen bg-[#FAF9F6] py-10 md:py-16">

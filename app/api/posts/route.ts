@@ -2,12 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/supabase/server";
-import { categories } from "@/lib/types";
+import { categories, languages } from "@/lib/types";
 import { slugify } from "@/lib/utils";
 
 export const runtime = "nodejs";
 const recent = new Map<string, number[]>();
-const schema = z.object({ author_name: z.string().trim().min(2).max(90), class_name: z.string().trim().min(1).max(20), section: z.string().trim().min(1).max(20), title: z.string().trim().min(2).max(140), category: z.enum(categories), language: z.enum(["English", "Urdu"]), content: z.string().trim().min(10).max(20000), rights: z.literal("on"), website: z.string().max(0).optional() });
+const schema = z.object({ author_name: z.string().trim().min(2).max(90), class_name: z.string().trim().min(1).max(20), section: z.string().trim().min(1).max(20), title: z.string().trim().min(2).max(140), category: z.enum(categories), language: z.enum(languages), content: z.string().trim().min(10).max(20000), rights: z.literal("on"), website: z.string().max(0).optional() });
 const plain = (value: string) => value.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").trim();
 
 export async function GET(request: NextRequest) {
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
     const db = createAdminClient(); let query = db.from("posts").select("id,slug,title,author_name,class_name,section,category,language,content,cover_image,published_at,view_count").eq("status", "published");
     const rawQ = search.get("q"); const q = rawQ?.replace(/[,%()]/g, " ").trim().slice(0, 100); if (q) query = query.or(`title.ilike.%${q}%,content.ilike.%${q}%,author_name.ilike.%${q}%`);
     const category = search.get("category"); if (category && categories.includes(category as (typeof categories)[number])) query = query.eq("category", category);
-    const language = search.get("language"); if (language === "English" || language === "Urdu") query = query.eq("language", language);
+    const language = search.get("language"); if (language && languages.includes(language as (typeof languages)[number])) query = query.eq("language", language);
     query = search.get("sort") === "popular" ? query.order("view_count", { ascending: false }) : query.order("published_at", { ascending: false });
     const { data, error } = await query.limit(100); if (error) throw error;
     return NextResponse.json(data);

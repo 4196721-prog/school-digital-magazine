@@ -1,6 +1,7 @@
 export const categories = ["Articles", "Blogs", "Poetry", "Stories", "Artwork", "Photography", "School Activities", "Achievements"] as const;
 export type Category = (typeof categories)[number];
-export type Language = "English" | "Urdu";
+export const languages = ["English", "Urdu", "Lisan ud-Dawat"] as const;
+export type Language = (typeof languages)[number];
 export type PostStatus = "pending" | "published" | "rejected" | "archived";
 export type Post = {
   id: string; slug: string; title: string; author_name: string; class_name: string; section: string;

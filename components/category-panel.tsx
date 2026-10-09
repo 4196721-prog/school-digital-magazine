@@ -54,7 +54,7 @@ export function CategoryPanel() {
             return (
               <Link
                 key={category}
-                href={`/category/${encodeURIComponent(category)}`}
+                href={`/category/${encodeURIComponent(category.toLowerCase())}`}
                 className="group flex flex-col rounded-xl sm:rounded-2xl overflow-hidden border border-[#E2E8F0] bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#C59B4B] hover:shadow-md last:col-span-2 sm:last:col-span-1"
               >
                 {/* Visual Image */}

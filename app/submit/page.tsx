@@ -30,9 +30,9 @@ export default function SubmitPage() {
                   <Feather size={15} />
                 </div>
                 <div>
-                  <h3 className="font-serif font-bold text-sm text-[#0F2952]">Words, Art &amp; Ideas</h3>
+                  <h3 className="font-serif font-bold text-sm text-[#0F2952]">Create. Express. Inspire.</h3>
                   <p className="text-xs text-[#64748B] mt-0.5 leading-relaxed">
-                    We welcome essays, stories, poetry, digital artwork, photography, and reflections in both English and Urdu.
+                    Share essays, stories, poetry, artwork, photography, and reflections in English, Urdu, or Lisan ud-Dawat.
                   </p>
                 </div>
               </div>
@@ -42,9 +42,9 @@ export default function SubmitPage() {
                   <ShieldCheck size={16} />
                 </div>
                 <div>
-                  <h3 className="font-serif font-bold text-sm text-[#0F2952]">Curated with Care</h3>
+                  <h3 className="font-serif font-bold text-sm text-[#0F2952]">Reviewed with Care</h3>
                   <p className="text-xs text-[#64748B] mt-0.5 leading-relaxed">
-                    Faculty editors from MSB Haidery and Badri High School review every submission prior to publication.
+                    Faculty editors review every submission before it is published.
                   </p>
                 </div>
               </div>
@@ -54,9 +54,9 @@ export default function SubmitPage() {
                   <Sparkles size={15} />
                 </div>
                 <div>
-                  <h3 className="font-serif font-bold text-sm text-[#0F2952]">Permanent School Record</h3>
+                  <h3 className="font-serif font-bold text-sm text-[#0F2952]">A Lasting Student Archive</h3>
                   <p className="text-xs text-[#64748B] mt-0.5 leading-relaxed">
-                    Approved student work joins our digital archives, complete with bylines and readership analytics.
+                    Approved student work becomes part of the school&apos;s digital archive, with student attribution and readership records.
                   </p>
                 </div>
               </div>

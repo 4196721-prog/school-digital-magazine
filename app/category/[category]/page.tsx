@@ -14,10 +14,15 @@ export async function generateMetadata({
   params: Promise<{ category: string }>;
 }): Promise<Metadata> {
   const { category: rawCategory } = await params;
-  const category = decodeURIComponent(rawCategory);
+  const decoded = decodeURIComponent(rawCategory);
+  const matched =
+    displayCategories.find((c) => c.toLowerCase() === decoded.toLowerCase()) ||
+    categories.find((c) => c.toLowerCase() === decoded.toLowerCase()) ||
+    decoded;
+
   return {
-    title: `${category} — MSB BHS Digital Magazine`,
-    description: `Explore student contributions in ${category} from MSB Haidery and Badri High School.`,
+    title: `${matched} — MSB BHS Digital Magazine`,
+    description: `Explore student contributions in ${matched} from MSB Haidery and Badri High School.`,
   };
 }
 
@@ -27,16 +32,21 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const { category: rawCategory } = await params;
-  const category = decodeURIComponent(rawCategory);
+  const categoryParam = decodeURIComponent(rawCategory);
 
-  const isValidCategory =
-    displayCategories.includes(category as DisplayCategory) ||
-    categories.includes(category as (typeof categories)[number]);
+  const matchedDisplay = displayCategories.find(
+    (c) => c.toLowerCase() === categoryParam.toLowerCase()
+  );
+  const matchedStandard = categories.find(
+    (c) => c.toLowerCase() === categoryParam.toLowerCase()
+  );
+  const resolvedCategory = matchedDisplay || matchedStandard;
 
-  if (!isValidCategory) notFound();
+  if (!resolvedCategory) notFound();
 
-  const posts = await getPosts({ category });
-  const meta = categoryMeta[category as DisplayCategory];
+  const posts = await getPosts({ category: resolvedCategory });
+  const meta = categoryMeta[resolvedCategory as DisplayCategory];
+  const category = resolvedCategory;
 
   return (
     <main className="min-h-screen bg-[#FAF9F6] py-12 md:py-20">

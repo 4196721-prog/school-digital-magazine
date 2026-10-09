@@ -5,7 +5,7 @@ import type { Post } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 
 export function PostCard({ post, variant = "" }: { post: Post; variant?: string }) {
-  const rtl = post.language === "Urdu";
+  const rtl = post.language === "Urdu" || post.language === "Lisan ud-Dawat";
 
   return (
     <article

@@ -18,9 +18,10 @@ export function MsbLogo({
       <Image
         src={src}
         alt="MSB Haidery Crest"
-        width={118}
-        height={116}
-        className="h-full w-auto object-contain drop-shadow-sm select-none"
+        width={384}
+        height={541}
+        unoptimized
+        className={`h-full w-auto object-contain select-none ${variant === "default" ? "" : "drop-shadow-sm"}`}
         priority
       />
     </div>
@@ -44,9 +45,10 @@ export function BhsLogo({
       <Image
         src={src}
         alt="Badri High School Logo"
-        width={182}
-        height={96}
-        className="h-full w-auto object-contain drop-shadow-sm select-none"
+        width={684}
+        height={283}
+        unoptimized
+        className={`h-full w-auto object-contain select-none ${variant === "default" ? "" : "drop-shadow-sm"}`}
         priority
       />
     </div>
@@ -59,8 +61,9 @@ export function SchoolDivider({ className = "h-12 w-auto" }: { className?: strin
       <Image
         src="/images/logos/gold-divider.png"
         alt="Divider"
-        width={24}
-        height={100}
+        width={48}
+        height={200}
+        unoptimized
         className="h-full w-auto object-contain select-none"
         priority
       />
@@ -79,8 +82,9 @@ export function SchoolIdentityLockup({
         <Image
           src="/images/logos/school-logos-lockup.png"
           alt="MSB Haidery & Badri High School"
-          width={525}
-          height={174}
+          width={270}
+          height={85}
+          unoptimized
           priority
           className="h-full w-auto object-contain drop-shadow-[0_2px_8px_rgba(15,41,82,0.12)] select-none"
         />
