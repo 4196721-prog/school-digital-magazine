@@ -18,8 +18,8 @@ export function MsbLogo({
       <Image
         src={src}
         alt="MSB Haidery Crest"
-        width={384}
-        height={541}
+        width={497}
+        height={676}
         unoptimized
         className={`h-full w-auto object-contain select-none ${variant === "default" ? "" : "drop-shadow-sm"}`}
         priority
