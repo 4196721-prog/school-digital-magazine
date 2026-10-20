@@ -52,7 +52,7 @@ export function HeroSection() {
 
         {/* Main Title: MSB BADRI DIGITAL MAGAZINE with Directional Entrance Motion */}
         <div className="flex flex-col items-center justify-center tracking-tight leading-[1.06] text-center select-none">
-          <h2 className="hero-motion-left-title hero-masthead-title font-cinzel font-black">
+          <h2 className="hero-motion-left-title hero-masthead-title gold-metallic-text font-cinzel font-black">
             MSB BADRI
           </h2>
           <span className="hero-motion-right-title font-cinzel text-xl sm:text-2xl md:text-4xl lg:text-[46px] xl:text-[52px] font-extrabold mt-1 sm:mt-2 gold-metallic-text tracking-wider leading-none">
