@@ -3,11 +3,26 @@ export type Category = (typeof categories)[number];
 export const languages = ["English", "Urdu", "Lisan ud-Dawat"] as const;
 export type Language = (typeof languages)[number];
 export type PostStatus = "pending" | "published" | "rejected" | "archived";
+export type OriginalSubmission = {
+  captured_at: string;
+  captured_by: string;
+  student_id: string;
+  title: string;
+  content: string;
+  category: Category;
+  language: Language;
+  author_name: string;
+  class_name: string;
+  section: string;
+  cover_image: string | null;
+  submitted_at: string;
+};
 export type Post = {
   id: string; slug: string; title: string; author_name: string; class_name: string; section: string;
   category: Category; language: Language; content: string; cover_image: string | null;
   published_at: string; submitted_at?: string; status?: PostStatus; view_count: number;
   editorial_rank?: number | null; editorial_featured?: boolean;
+  original_submission?: OriginalSubmission | null;
 };
 
 export const demoPosts: Post[] = [

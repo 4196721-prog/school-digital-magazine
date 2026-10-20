@@ -1,13 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import type { PostStatus } from "@/lib/types";
+import { categories, languages, type PostStatus } from "@/lib/types";
+import { z } from "zod";
 
 const transitions: Record<string, { from: PostStatus; to: PostStatus }> = {
   approve: { from: "pending", to: "published" },
   reject: { from: "pending", to: "rejected" },
   archive: { from: "published", to: "archived" },
 };
+const editSchema = z.object({
+  action: z.literal("edit"),
+  title: z.string().trim().min(2).max(140),
+  content: z.string().trim().min(10).max(20000),
+  category: z.enum(categories),
+  language: z.enum(languages),
+  author_name: z.string().trim().min(2).max(90),
+  class_name: z.string().trim().min(1).max(20),
+  section: z.string().trim().min(1).max(20),
+}).strict();
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const auth = await createClient();
@@ -16,12 +27,30 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
   const { id } = await params;
   if (!/^[0-9a-f-]{36}$/i.test(id)) return NextResponse.json({ error: "Invalid post ID." }, { status: 400 });
-  let action: string;
+  let body: unknown;
   try {
-    const body = await request.json();
-    action = typeof body.action === "string" ? body.action : "";
+    body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+  }
+  const action = typeof body === "object" && body !== null && "action" in body && typeof body.action === "string" ? body.action : "";
+  if (action === "edit") {
+    const parsed = editSchema.safeParse(body);
+    if (!parsed.success) return NextResponse.json({ error: "Check the title, story, category, language, and author details." }, { status: 400 });
+    const { data, error } = await createAdminClient().rpc("edit_pending_post", {
+      p_post_id: id,
+      p_editor_id: user.id,
+      p_title: parsed.data.title,
+      p_content: parsed.data.content,
+      p_category: parsed.data.category,
+      p_language: parsed.data.language,
+      p_author_name: parsed.data.author_name,
+      p_class_name: parsed.data.class_name,
+      p_section: parsed.data.section,
+    });
+    if (error) return NextResponse.json({ error: "Could not save the edited submission." }, { status: 500 });
+    if (!data) return NextResponse.json({ error: "This submission is no longer pending. Refresh the queue before editing." }, { status: 409 });
+    return NextResponse.json({ ok: true, ...data });
   }
   const transition = transitions[action];
   const db = createAdminClient();

@@ -50,10 +50,10 @@ export function HeroSection() {
           <BhsLogo className="h-[52px] sm:h-[66px] md:h-[80px] lg:h-[96px] xl:h-[105px] w-auto" />
         </div>
 
-        {/* Main Title: MSB BHS DIGITAL MAGAZINE with Directional Entrance Motion */}
+        {/* Main Title: MSB BADRI DIGITAL MAGAZINE with Directional Entrance Motion */}
         <div className="flex flex-col items-center justify-center tracking-tight leading-[1.06] text-center select-none">
-          <h2 className="hero-motion-left-title font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-[62px] xl:text-[68px] font-black text-[#0A1838] drop-shadow-[0_2px_4px_rgba(255,255,255,0.7)] tracking-wide leading-none">
-            MSB BHS
+          <h2 className="hero-motion-left-title hero-masthead-title font-cinzel font-black">
+            MSB BADRI
           </h2>
           <span className="hero-motion-right-title font-cinzel text-xl sm:text-2xl md:text-4xl lg:text-[46px] xl:text-[52px] font-extrabold mt-1 sm:mt-2 gold-metallic-text tracking-wider leading-none">
             DIGITAL MAGAZINE

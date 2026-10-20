@@ -37,7 +37,7 @@ export async function getPost(slug: string): Promise<Post | null> {
   let normalizedSlug = slug;
   try { normalizedSlug = decodeURIComponent(slug); } catch {}
   if (!isSupabaseConfigured()) return demoPosts.find((post) => post.slug === normalizedSlug) ?? null;
-  const { data, error } = await createAdminClient().from("posts").select("*").eq("slug", normalizedSlug).eq("status", "published").maybeSingle();
+  const { data, error } = await createAdminClient().from("posts").select("id,slug,title,author_name,class_name,section,category,language,content,cover_image,published_at,view_count,editorial_rank,editorial_featured").eq("slug", normalizedSlug).eq("status", "published").maybeSingle();
   if (error) throw new Error(error.message);
   return data as Post | null;
 }
