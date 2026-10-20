@@ -2,21 +2,30 @@ import { createAdminClient, } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/supabase/server";
 import { demoPosts, type Post } from "@/lib/types";
 
-export async function getPosts(options: { search?: string; category?: string; language?: string; sort?: string; limit?: number } = {}): Promise<Post[]> {
-  const { search, category, language, sort, limit } = options;
+export async function getPosts(options: { search?: string; category?: string; language?: string; sort?: string; limit?: number; featuredFirst?: boolean } = {}): Promise<Post[]> {
+  const { search, category, language, sort, limit, featuredFirst } = options;
   if (!isSupabaseConfigured()) {
     let rows = [...demoPosts];
     if (search) rows = rows.filter((post) => `${post.title} ${post.content} ${post.author_name}`.toLowerCase().includes(search.toLowerCase()));
     if (category) rows = rows.filter((post) => post.category === category);
     if (language) rows = rows.filter((post) => post.language === language);
-    rows.sort((a, b) => sort === "popular" ? b.view_count - a.view_count : Date.parse(b.published_at) - Date.parse(a.published_at));
+    rows.sort((a, b) => {
+      if (featuredFirst && Number(Boolean(b.editorial_featured)) !== Number(Boolean(a.editorial_featured))) {
+        return Number(Boolean(b.editorial_featured)) - Number(Boolean(a.editorial_featured));
+      }
+      const rankDifference = (b.editorial_rank ?? 0) - (a.editorial_rank ?? 0);
+      if (rankDifference) return rankDifference;
+      return sort === "popular" ? b.view_count - a.view_count : Date.parse(b.published_at) - Date.parse(a.published_at);
+    });
     return limit ? rows.slice(0, limit) : rows;
   }
   const db = createAdminClient();
-  let query = db.from("posts").select("id,slug,title,author_name,class_name,section,category,language,content,cover_image,published_at,view_count").eq("status", "published");
+  let query = db.from("posts").select("id,slug,title,author_name,class_name,section,category,language,content,cover_image,published_at,view_count,editorial_rank,editorial_featured").eq("status", "published");
   if (search) { const term = search.replace(/[,%()]/g, " ").trim().slice(0, 100); query = query.or(`title.ilike.%${term}%,content.ilike.%${term}%,author_name.ilike.%${term}%`); }
   if (category) query = query.eq("category", category);
   if (language) query = query.eq("language", language);
+  if (featuredFirst) query = query.order("editorial_featured", { ascending: false });
+  query = query.order("editorial_rank", { ascending: false });
   query = sort === "popular" ? query.order("view_count", { ascending: false }) : query.order("published_at", { ascending: false });
   if (limit) query = query.limit(limit);
   const { data, error } = await query;

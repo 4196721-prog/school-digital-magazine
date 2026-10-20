@@ -263,7 +263,8 @@ export function SubmitForm() {
       <button
         type="submit"
         disabled={busy}
-        className="w-full py-3.5 px-6 rounded-full bg-[#0F2952] hover:bg-[#C59B4B] text-white text-sm font-semibold transition-all duration-200 shadow-md flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-wait"
+        aria-busy={busy}
+        className="w-full py-3.5 px-6 rounded-full bg-[#0F2952] hover:bg-[#C59B4B] text-white hover:text-[#0B1B3D] text-sm font-semibold transition-all duration-200 shadow-md flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0F2952] focus-visible:ring-offset-2 disabled:opacity-70 disabled:cursor-wait disabled:hover:bg-[#0F2952] disabled:hover:text-white"
       >
         <span>{busy ? "Submitting to Editorial Desk…" : "Send to the Editors"}</span>
         <ArrowRight size={15} />

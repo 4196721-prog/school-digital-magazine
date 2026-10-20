@@ -13,10 +13,11 @@ const plain = (value: string) => value.replace(/[\u0000-\u0008\u000B\u000C\u000E
 export async function GET(request: NextRequest) {
   const search = request.nextUrl.searchParams;
   try {
-    const db = createAdminClient(); let query = db.from("posts").select("id,slug,title,author_name,class_name,section,category,language,content,cover_image,published_at,view_count").eq("status", "published");
+    const db = createAdminClient(); let query = db.from("posts").select("id,slug,title,author_name,class_name,section,category,language,content,cover_image,published_at,view_count,editorial_rank,editorial_featured").eq("status", "published");
     const rawQ = search.get("q"); const q = rawQ?.replace(/[,%()]/g, " ").trim().slice(0, 100); if (q) query = query.or(`title.ilike.%${q}%,content.ilike.%${q}%,author_name.ilike.%${q}%`);
     const category = search.get("category"); if (category && categories.includes(category as (typeof categories)[number])) query = query.eq("category", category);
     const language = search.get("language"); if (language && languages.includes(language as (typeof languages)[number])) query = query.eq("language", language);
+    query = query.order("editorial_rank", { ascending: false });
     query = search.get("sort") === "popular" ? query.order("view_count", { ascending: false }) : query.order("published_at", { ascending: false });
     const { data, error } = await query.limit(100); if (error) throw error;
     return NextResponse.json(data);

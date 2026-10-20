@@ -7,6 +7,7 @@ export type Post = {
   id: string; slug: string; title: string; author_name: string; class_name: string; section: string;
   category: Category; language: Language; content: string; cover_image: string | null;
   published_at: string; submitted_at?: string; status?: PostStatus; view_count: number;
+  editorial_rank?: number | null; editorial_featured?: boolean;
 };
 
 export const demoPosts: Post[] = [
