@@ -32,14 +32,7 @@
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
-.gold-metallic-text {
-  background: linear-gradient(180deg, #F7E4A0 0%, #D8AA3D 18%, #A66F12 42%, #E0B745 55%, #80500B 78%, #C28D27 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: clamp(1.1px, 0.18vw, 2.2px) #080806;
-  paint-order: stroke fill;
-  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.38));
-}
+.gold-metallic-text { color: #17233D; text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18); }
 
 .font-urdu {
   font-family: "Noto Nastaliq Urdu", "Noto Naskh Arabic", "Urdu Typesetting", "Arial", serif;
