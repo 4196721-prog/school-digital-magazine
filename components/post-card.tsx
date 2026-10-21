@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { CoverImage } from "@/components/cover-image";
 import { ArrowUpRight, Eye } from "lucide-react";
 import type { Post } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
@@ -20,7 +20,7 @@ export function PostCard({ post, variant = "" }: { post: Post; variant?: string 
         aria-label={`Read story: ${post.title}`}
       >
         {post.cover_image ? (
-          <Image
+          <CoverImage
             src={post.cover_image}
             alt={`Cover image for ${post.title}`}
             fill

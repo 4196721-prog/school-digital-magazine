@@ -1,11 +1,11 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowRight, ArrowUpRight, Sparkles, BookOpen, PenLine } from "lucide-react";
 import { getPosts } from "@/lib/data";
 import { PostCard } from "@/components/post-card";
 import { HeroSection } from "@/components/hero-section";
 import { CategoryPanel } from "@/components/category-panel";
 import { formatDate } from "@/lib/utils";
+import { CoverImage } from "@/components/cover-image";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +45,7 @@ export default async function Home() {
             {/* Visual Cover */}
             <div className="relative lg:col-span-7 min-h-[320px] lg:min-h-[460px] bg-[#0F2952] overflow-hidden group">
               {lead.cover_image ? (
-                <Image
+                <CoverImage
                   src={lead.cover_image}
                   alt={lead.title}
                   fill

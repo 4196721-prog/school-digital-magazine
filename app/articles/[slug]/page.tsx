@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Eye, Calendar } from "lucide-react";
 import { getPost, getPosts } from "@/lib/data";
@@ -8,6 +7,7 @@ import { formatDate } from "@/lib/utils";
 import { PostCard } from "@/components/post-card";
 import { ViewTracker } from "@/components/view-tracker";
 import { ShareButton } from "@/components/share-button";
+import { CoverImage } from "@/components/cover-image";
 
 function createDescription(content: string) {
   const normalized = content.replace(/\s+/g, " ").trim();
@@ -117,7 +117,7 @@ export default async function ArticlePage({
         {/* Cover Image (if present) */}
         {post.cover_image && (
           <div className="relative aspect-[16/9] w-full rounded-2xl md:rounded-3xl overflow-hidden mb-12 shadow-md bg-[#EEF2F7]">
-            <Image
+            <CoverImage
               src={post.cover_image}
               alt={`Cover image for ${post.title}`}
               fill
