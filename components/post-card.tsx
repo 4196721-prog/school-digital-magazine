@@ -9,7 +9,7 @@ export function PostCard({ post, variant = "" }: { post: Post; variant?: string 
 
   return (
     <article
-      className={`group flex flex-col bg-white rounded-2xl border border-[#E5E9F0] overflow-hidden shadow-sm hover:shadow-xl hover:border-[#C59B4B]/50 transition-all duration-300 hover:-translate-y-1 ${variant} ${
+      className={`magazine-story-card group flex flex-col bg-white rounded-2xl border border-[#E5E9F0] overflow-hidden shadow-sm hover:shadow-xl hover:border-[#C59B4B]/50 transition-all duration-300 hover:-translate-y-1 ${variant} ${
         rtl ? "text-right" : "text-left"
       }`}
     >

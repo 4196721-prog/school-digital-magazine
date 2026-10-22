@@ -14,7 +14,7 @@ export default async function Home() {
   const [lead, ...latest] = posts;
 
   return (
-    <main className="min-h-screen bg-[#FAF9F6] text-[#111827]">
+    <main className="magazine-home min-h-screen bg-[#FAF9F6] text-[#111827]">
       {/* 1. Cinematic Hero Section with Clean Background and HTML UI */}
       <HeroSection />
 
@@ -23,7 +23,7 @@ export default async function Home() {
 
       {/* 3. Featured Story Spotlight (if any lead post exists) */}
       {lead && (
-        <section className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 mt-16 md:mt-24">
+        <section className="home-featured max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 mt-16 md:mt-24">
           <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#E8EEF5]">
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs tracking-[0.2em] font-bold text-[#0F2952] uppercase flex items-center gap-2">
@@ -111,7 +111,7 @@ export default async function Home() {
       )}
 
       {/* 4. Latest Stories Grid */}
-      <section className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 mt-16 md:mt-24">
+      <section className="home-latest max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 mt-16 md:mt-24">
         <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#E8EEF5]">
           <div className="flex items-center gap-3">
             <span className="font-mono text-xs tracking-[0.2em] font-bold text-[#0F2952] uppercase">
@@ -157,7 +157,7 @@ export default async function Home() {
       </section>
 
       {/* 5. Editorial Vision & Submission Banner */}
-      <section className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 my-20 md:my-28">
+      <section className="home-invitation max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 my-20 md:my-28">
         <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#0B1B3D] via-[#10254C] to-[#0A1735] text-white p-8 sm:p-12 lg:p-16 shadow-2xl">
           {/* Subtle background glow effect */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#C59B4B]/10 rounded-full blur-3xl pointer-events-none" />

@@ -27,7 +27,7 @@ export default async function ArticlesPage({
   const filtered = Boolean(params.q || params.category || params.language);
 
   return (
-    <main className="min-h-screen bg-[#FAF9F6] py-12 md:py-20">
+    <main className="magazine-listing-page min-h-screen bg-[#FAF9F6] py-12 md:py-20">
       <div className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="max-w-3xl mb-10 md:mb-14">

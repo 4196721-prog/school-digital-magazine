@@ -26,7 +26,7 @@ const iconMap = {
 
 export function CategoryPanel() {
   return (
-    <section className="category-panel-wrapper relative z-20 -mt-10 sm:-mt-14 md:-mt-16 lg:-mt-20 px-3 sm:px-6 lg:px-8 max-w-[1560px] mx-auto">
+    <section className="magazine-category-panel category-panel-wrapper relative z-20 -mt-10 sm:-mt-14 md:-mt-16 lg:-mt-20 px-3 sm:px-6 lg:px-8 max-w-[1560px] mx-auto">
       <div className="category-panel bg-white rounded-2xl sm:rounded-3xl lg:rounded-[32px] shadow-[0_16px_50px_rgba(11,27,61,0.09)] border border-[#E9EDF4] p-3.5 sm:p-6 lg:p-7 transition-all hover:shadow-[0_20px_55px_rgba(11,27,61,0.12)]">
         {/* Header Bar */}
         <div className="flex items-center justify-between pb-3 sm:pb-5 border-b border-[#EEF2F7]">

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#FAF9F6] py-16 md:py-24">
+    <main className="magazine-about-page min-h-screen bg-[#FAF9F6] py-16 md:py-24">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Header */}
         <div className="text-center max-w-3xl mx-auto">

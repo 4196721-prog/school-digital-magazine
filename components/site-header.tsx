@@ -22,6 +22,15 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
 
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [menuOpen]);
+
   const scrolled = pathname !== "/" || scrollYScrolled;
 
   const navLinks = [
@@ -41,10 +50,10 @@ export function SiteHeader() {
 
   return (
     <header
-      className="fixed top-2.5 sm:top-3.5 left-0 right-0 z-50 px-3 sm:px-6 w-full max-w-[960px] mx-auto pointer-events-none transition-all duration-300 opacity-100 translate-y-0"
+      className="magazine-header fixed top-2.5 sm:top-3.5 left-0 right-0 z-50 px-3 sm:px-6 w-full max-w-[1120px] mx-auto pointer-events-none transition-all duration-300 opacity-100 translate-y-0"
     >
       <div
-        className={`w-full pointer-events-auto rounded-full px-4 sm:px-7 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-4 md:gap-8 transition-all duration-300 ${
+        className={`magazine-header-bar w-full pointer-events-auto rounded-full px-4 sm:px-7 py-2 sm:py-2.5 flex items-center justify-between gap-2 sm:gap-4 md:gap-8 transition-all duration-300 ${
           scrolled
             ? "bg-white/95 backdrop-blur-md shadow-[0_8px_30px_rgba(11,27,61,0.12)] border border-[#E5EBF2]"
             : "bg-white/92 backdrop-blur-md shadow-[0_6px_25px_rgba(11,27,61,0.08)] border border-white/80"
@@ -79,6 +88,7 @@ export function SiteHeader() {
               <Link
                 key={link.href}
                 href={link.href}
+                aria-current={isActive ? "page" : undefined}
                 className={`relative py-1 font-editorial text-[16px] tracking-tight transition-colors hover:text-[#C59B4B] ${
                   isActive ? "text-[#0B1B3D] font-semibold" : "text-[#334155]"
                 }`}
@@ -115,6 +125,7 @@ export function SiteHeader() {
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
+            aria-controls="magazine-mobile-menu"
             className="md:hidden w-8 h-8 rounded-full flex items-center justify-center text-[#0B1B3D] hover:bg-[#F1F4F9] transition-colors"
           >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -124,8 +135,8 @@ export function SiteHeader() {
 
       {/* Mobile Drawer */}
       {menuOpen && (
-        <div className="pointer-events-auto md:hidden mt-2 bg-white/98 backdrop-blur-lg rounded-2xl shadow-xl border border-[#E8EEF5] p-5 animate-in fade-in slide-in-from-top-2 duration-200">
-          <nav className="flex flex-col gap-3 pb-4 border-b border-[#EEF2F7]">
+        <div id="magazine-mobile-menu" className="magazine-mobile-drawer pointer-events-auto md:hidden mt-2 bg-white/98 backdrop-blur-lg rounded-2xl shadow-xl border border-[#E8EEF5] p-5 animate-in fade-in slide-in-from-top-2 duration-200">
+          <nav aria-label="Mobile navigation" className="flex flex-col gap-3 pb-4 border-b border-[#EEF2F7]">
             {navLinks.map((link) => {
               const isActive =
                 link.href === "/"
@@ -137,6 +148,7 @@ export function SiteHeader() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMenuOpen(false)}
+                  aria-current={isActive ? "page" : undefined}
                   className={`flex items-center justify-between text-base py-1.5 font-serif ${
                     isActive ? "text-[#0F2952] font-bold" : "text-[#475569]"
                   }`}
@@ -148,13 +160,14 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <form onSubmit={handleSearchSubmit} className="mt-4 flex items-center bg-[#F4F6F9] rounded-full px-4 py-2 border border-[#E2E8F0]">
+          <form onSubmit={handleSearchSubmit} aria-label="Search the magazine" className="mt-4 flex items-center bg-[#F4F6F9] rounded-full px-4 py-2 border border-[#E2E8F0]">
             <Search size={16} className="text-[#64748B] mr-2" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search articles, stories..."
+              aria-label="Search articles"
               className="w-full bg-transparent text-sm text-[#0F2952] focus:outline-none"
             />
           </form>

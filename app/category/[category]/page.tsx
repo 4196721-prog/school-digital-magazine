@@ -49,7 +49,7 @@ export default async function CategoryPage({
   const category = resolvedCategory;
 
   return (
-    <main className="min-h-screen bg-[#FAF9F6] py-12 md:py-20">
+    <main className="magazine-listing-page magazine-category-page min-h-screen bg-[#FAF9F6] py-12 md:py-20">
       <div className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <div className="mb-6">

@@ -34,7 +34,7 @@ export default function RootLayout({
         <div className="flex-1 w-full">{children}</div>
 
         {/* Global Footer */}
-        <footer className="w-full bg-[#0B1B3D] text-white border-t border-[#162D5A] mt-auto">
+        <footer className="magazine-footer w-full bg-[#0B1B3D] text-white border-t border-[#162D5A] mt-auto">
           {/* Top Banner */}
           <div className="max-w-[1560px] mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 border-b border-white/10">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">

@@ -57,11 +57,11 @@ export default async function ArticlePage({
   const rtl = post.language === "Urdu" || post.language === "Lisan ud-Dawat";
 
   return (
-    <main className="min-h-screen bg-[#FAF9F6] py-10 md:py-16">
+    <main className="editorial-article-page min-h-screen bg-[#FAF9F6] py-10 md:py-16">
       {/* View Tracking Component */}
       <ViewTracker postId={post.id} />
 
-      <article className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
+      <article className="editorial-article-shell max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8">
         {/* Top Back Navigation Bar */}
         <div className="flex items-center justify-between pb-6 mb-8 border-b border-[#E8EEF5]">
           <Link
@@ -116,7 +116,7 @@ export default async function ArticlePage({
 
         {/* Cover Image (if present) */}
         {post.cover_image && (
-          <div className="relative aspect-[16/9] w-full rounded-2xl md:rounded-3xl overflow-hidden mb-12 shadow-md bg-[#EEF2F7]">
+          <div className="article-cover-frame relative aspect-[16/9] w-full rounded-2xl md:rounded-3xl overflow-hidden mb-12 shadow-md bg-[#EEF2F7]">
             <CoverImage
               src={post.cover_image}
               alt={`Cover image for ${post.title}`}
@@ -130,7 +130,7 @@ export default async function ArticlePage({
 
         {/* Content Body */}
         <div
-          className={`prose prose-lg max-w-none text-[#1E293B] font-serif text-lg sm:text-xl leading-[1.9] sm:leading-[2.05] ${
+          className={`article-content-body prose prose-lg max-w-none text-[#1E293B] font-serif text-lg sm:text-xl leading-[1.9] sm:leading-[2.05] ${
             rtl ? "text-right font-urdu text-xl sm:text-2xl leading-[2.3]" : ""
           }`}
           dir={rtl ? "rtl" : "ltr"}
@@ -143,7 +143,7 @@ export default async function ArticlePage({
         </div>
 
         {/* Social Share and Contribution Footer */}
-        <div className="mt-14 pt-8 border-t border-[#E8EEF5] flex flex-wrap items-center justify-between gap-4">
+        <div className="article-share-row mt-14 pt-8 border-t border-[#E8EEF5] flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <ShareButton slug={post.slug} />
           </div>
@@ -159,7 +159,7 @@ export default async function ArticlePage({
 
         {/* Related Works in this category */}
         {related.length > 0 && (
-          <section className="mt-20 pt-12 border-t border-[#E8EEF5]">
+          <section className="article-related mt-20 pt-12 border-t border-[#E8EEF5]">
             <div className="flex items-center justify-between mb-8">
               <div>
                 <span className="font-mono text-xs tracking-[0.2em] font-bold text-[#C59B4B] uppercase">
